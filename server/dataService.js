@@ -7,29 +7,35 @@ const __dirname = path.dirname(__filename);
 
 /**
  * 获取市场数据
- * 数据来源：Wind万得金融终端API
+ * 数据来源：AKShare - 开源的金融数据接口库
  * 
  * 使用说明：
- * 1. 需要安装Wind金融终端客户端
- * 2. 需要安装WindPy: pip install WindPy
- * 3. 确保Wind终端已登录
+ * 1. 需要安装Python 3.7+
+ * 2. 需要安装AKShare: pip install akshare
+ * 3. 需要安装pandas: pip install pandas
  */
 
 /**
- * 调用Wind Python API获取数据
+ * 调用AKShare Python API获取数据
  * @param {string} script - Python脚本路径
  * @param {Array} args - 参数列表
  * @returns {Promise<Object>} 返回JSON数据
  */
-let windPyWarningShown = false;
+let akshareWarningShown = false;
 
-async function callWindAPI(script, args = []) {
+async function callAKShareAPI(script, args = []) {
   return new Promise((resolve, reject) => {
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
     const pythonProcess = spawn(pythonCmd, [script, ...args]);
     
     let dataString = '';
     let errorString = '';
+    
+    // 设置超时时间（5分钟）
+    const timeout = setTimeout(() => {
+      pythonProcess.kill();
+      reject(new Error('AKShare API 调用超时（5分钟）'));
+    }, 300000); // 5分钟 = 300秒
     
     pythonProcess.stdout.on('data', (data) => {
       dataString += data.toString();
@@ -40,27 +46,29 @@ async function callWindAPI(script, args = []) {
     });
     
     pythonProcess.on('close', (code) => {
+      clearTimeout(timeout); // 清除超时定时器
+      
       if (code !== 0) {
-        // 检查是否是 WindPy 模块缺失错误
-        if (errorString.includes('No module named \'WindPy\'')) {
-          if (!windPyWarningShown) {
-            console.error('\n❌ Wind API 配置错误');
+        // 检查是否是 AKShare 模块缺失错误
+        if (errorString.includes('No module named \'akshare\'')) {
+          if (!akshareWarningShown) {
+            console.error('\n❌ AKShare 配置错误');
             console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.error('原因: WindPy 模块未安装');
+            console.error('原因: AKShare 模块未安装');
             console.error('');
-            console.error('WindPy 是 Wind 金融终端的专属 SDK，需要：');
-            console.error('  1. 购买 Wind 服务订阅');
-            console.error('  2. 安装 Wind 金融终端');
-            console.error('  3. 从 Wind 终端安装目录获取 WindPy');
+            console.error('请安装 AKShare:');
+            console.error('  pip install akshare');
+            console.error('  pip install pandas');
             console.error('');
-            console.error('详细配置指南: WIND_API_SETUP.md');
+            console.error('AKShare 是免费开源的金融数据接口库');
+            console.error('文档: https://akshare.akfamily.xyz/');
             console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-            windPyWarningShown = true;
+            akshareWarningShown = true;
           }
-          reject(new Error('WindPy 模块未安装。请安装 Wind 金融终端和 WindPy，或查看 WIND_API_SETUP.md 了解详情。'));
+          reject(new Error('AKShare 模块未安装。请运行: pip install akshare pandas'));
         } else {
-          console.error('Wind API 执行错误:', errorString);
-          reject(new Error(`Wind API 调用失败: ${errorString}`));
+          console.error('AKShare API 执行错误:', errorString);
+          reject(new Error(`AKShare API 调用失败: ${errorString}`));
         }
         return;
       }
@@ -69,20 +77,14 @@ async function callWindAPI(script, args = []) {
         const result = JSON.parse(dataString);
         resolve(result);
       } catch (error) {
-        console.error('解析 Wind 数据失败:', error);
+        console.error('解析 AKShare 数据失败:', error);
         reject(new Error(`数据解析失败: ${error.message}`));
       }
     });
-    
-    // 设置超时时间（10秒）
-    setTimeout(() => {
-      pythonProcess.kill();
-      reject(new Error('Wind API 调用超时（10秒）'));
-    }, 10000);
   });
 }
 
-// 获取主要指数数据（使用Wind API）
+// 获取主要指数数据（使用AKShare API）
 async function getIndicesData(date) {
   const indices = [
     { code: '000001.SH', name: '上证指数' },
@@ -93,10 +95,10 @@ async function getIndicesData(date) {
     { code: '000016.SH', name: '上证50' },
   ];
 
-  // 调用Wind API获取指数数据 - 失败直接抛出异常
-  const scriptPath = path.join(__dirname, 'wind_api', 'get_indices.py');
+  // 调用AKShare API获取指数数据 - 失败直接抛出异常
+  const scriptPath = path.join(__dirname, 'akshare_api', 'get_indices.py');
   const codes = indices.map(i => i.code).join(',');
-  const result = await callWindAPI(scriptPath, [codes, date]);
+  const result = await callAKShareAPI(scriptPath, [codes, date]);
   
   // 格式化返回数据
   return result.map((item, index) => ({
@@ -106,20 +108,20 @@ async function getIndicesData(date) {
   }));
 }
 
-// 获取板块数据（使用Wind API）
+// 获取板块数据（使用AKShare API）
 async function getSectorsData(date) {
-  // 调用Wind API获取板块数据 - 失败直接抛出异常
-  const scriptPath = path.join(__dirname, 'wind_api', 'get_sectors.py');
-  const result = await callWindAPI(scriptPath, [date]);
+  // 调用AKShare API获取板块数据 - 失败直接抛出异常
+  const scriptPath = path.join(__dirname, 'akshare_api', 'get_sectors.py');
+  const result = await callAKShareAPI(scriptPath, [date]);
   
   return result;
 }
 
 // 获取市场概况数据
 async function getMarketOverview(date) {
-  // 调用Wind API获取市场概况 - 失败直接抛出异常
-  const scriptPath = path.join(__dirname, 'wind_api', 'get_market_overview.py');
-  const result = await callWindAPI(scriptPath, [date]);
+  // 调用AKShare API获取市场概况 - 使用V3超快版本
+  const scriptPath = path.join(__dirname, 'akshare_api', 'get_market_overview_v3.py');
+  const result = await callAKShareAPI(scriptPath, [date]);
   
   return {
     ...result,
@@ -127,11 +129,11 @@ async function getMarketOverview(date) {
   };
 }
 
-// 获取股债利差数据（使用Wind API）
+// 获取股债利差数据（使用AKShare API）
 async function getEquityBondSpreadData(date) {
-  // 调用Wind API获取股债利差历史数据 - 失败直接抛出异常
-  const scriptPath = path.join(__dirname, 'wind_api', 'get_equity_bond_spread.py');
-  const result = await callWindAPI(scriptPath, [date]);
+  // 调用AKShare API获取股债利差历史数据 - 失败直接抛出异常
+  const scriptPath = path.join(__dirname, 'akshare_api', 'get_equity_bond_spread.py');
+  const result = await callAKShareAPI(scriptPath, [date]);
   
   return result;
 }

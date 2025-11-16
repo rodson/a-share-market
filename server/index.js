@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { getMarketData } from './dataService.js';
+import { getCachedMarketData, clearCache, getCacheStats } from './cacheService.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// 获取市场数据API
+// 获取市场数据API（使用缓存）
 app.get('/api/market-data', async (req, res) => {
   try {
     const { date } = req.query;
@@ -21,7 +21,7 @@ app.get('/api/market-data', async (req, res) => {
       });
     }
 
-    const data = await getMarketData(date);
+    const data = await getCachedMarketData(date);
     res.json({
       success: true,
       data
@@ -30,12 +30,12 @@ app.get('/api/market-data', async (req, res) => {
     console.error('API Error:', error.message);
     
     // 根据错误类型返回不同的状态码和消息
-    if (error.message.includes('WindPy')) {
+    if (error.message.includes('AKShare')) {
       return res.status(503).json({ 
         success: false,
-        message: 'Wind API 未配置',
+        message: 'AKShare 未配置',
         error: error.message,
-        hint: '请安装 Wind 金融终端和 WindPy，或查看 WIND_API_SETUP.md 了解详情'
+        hint: '请安装 AKShare: pip install akshare pandas'
       });
     }
     
@@ -45,6 +45,18 @@ app.get('/api/market-data', async (req, res) => {
       error: error.message 
     });
   }
+});
+
+// 清空缓存API（用于调试）
+app.post('/api/cache/clear', (req, res) => {
+  clearCache();
+  res.json({ success: true, message: '缓存已清空' });
+});
+
+// 查看缓存统计API（用于调试）
+app.get('/api/cache/stats', (req, res) => {
+  const stats = getCacheStats();
+  res.json({ success: true, stats });
 });
 
 app.listen(PORT, () => {

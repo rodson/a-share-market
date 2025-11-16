@@ -25,14 +25,21 @@
 
 ## 数据来源
 
-本项目支持多种数据源：
+本项目使用 **AKShare** 作为主要数据源：
 
-1. **新浪财经API** - 实时指数行情数据
-2. **东方财富网API** - 板块数据和个股数据
-3. **腾讯财经API** - 备用数据源
-4. **AkShare** - 可选的Python数据接口
+### AKShare - 免费开源金融数据接口
 
-> 注意：由于是免费API，部分数据可能存在延迟或限制。如需更专业的数据服务，建议使用Tushare等付费接口。
+- ✅ **完全免费** - 无需付费订阅
+- ✅ **开源项目** - GitHub 10k+ 星标
+- ✅ **数据丰富** - 覆盖股票、基金、债券、期货等
+- ✅ **易于使用** - 简单的 Python API
+- ✅ **实时更新** - 数据源稳定可靠
+
+**官方网站**: https://akshare.akfamily.xyz/
+
+**数据接口说明**: 详见 `server/akshare_api/README.md`
+
+> 注意：AKShare 数据来自公开数据源（东方财富、新浪财经等），适合个人项目和学习使用。如需机构级数据质量，建议使用 Wind、Tushare 等专业数据服务。
 
 ## 技术栈
 
@@ -45,13 +52,37 @@
 
 ## 安装和运行
 
-### 1. 安装依赖
+### 1. 克隆项目
+
+```bash
+git clone <repository-url>
+cd a-share-market
+```
+
+### 2. 安装 Node.js 依赖
 
 ```bash
 npm install
 ```
 
-### 2. 启动后端服务
+### 3. 安装 Python 依赖
+
+```bash
+# 安装 AKShare 和 pandas
+npm run setup:akshare
+
+# 或手动安装
+pip3 install akshare pandas
+```
+
+### 4. 验证 AKShare 安装
+
+```bash
+# 测试数据接口
+npm run test:akshare
+```
+
+### 5. 启动后端服务
 
 ```bash
 npm run server
@@ -59,7 +90,7 @@ npm run server
 
 后端服务将运行在 `http://localhost:3001`
 
-### 3. 启动前端开发服务器
+### 6. 启动前端开发服务器
 
 在新的终端窗口中运行：
 
@@ -69,7 +100,7 @@ npm run dev
 
 前端应用将运行在 `http://localhost:3000`
 
-### 4. 访问应用
+### 7. 访问应用
 
 在浏览器中打开 `http://localhost:3000`
 
@@ -94,12 +125,17 @@ a-share-market/
 │   ├── main.jsx            # 应用入口
 │   └── index.css           # 全局样式
 ├── server/
+│   ├── akshare_api/        # AKShare数据接口
+│   │   ├── get_indices.py          # 获取指数数据
+│   │   ├── get_market_overview.py  # 获取市场概况
+│   │   ├── get_sectors.py          # 获取板块数据
+│   │   ├── get_equity_bond_spread.py # 获取股债利差
+│   │   └── README.md               # API使用说明
 │   ├── index.js            # Express服务器
 │   └── dataService.js      # 数据获取服务
 ├── index.html              # HTML模板
 ├── vite.config.js          # Vite配置
 └── package.json            # 项目配置
-
 ```
 
 ## API接口说明
@@ -130,39 +166,79 @@ a-share-market/
 
 ## 数据接口扩展
 
-如需接入真实的金融数据API，可以修改 `server/dataService.js` 文件：
+本项目默认使用 **AKShare**，这是一个免费开源的数据源，适合大多数使用场景。
 
-### 使用Tushare（推荐）
+### 如需更换数据源
 
-```javascript
-// 需要先注册获取token: https://tushare.pro/
-import tushare from 'tushare';
-const pro = tushare.pro_api('your_token_here');
-```
+如需接入其他金融数据API，可以修改 `server/dataService.js` 文件：
 
-### 使用AkShare
+#### 1. 使用 Wind API（机构级数据）
+
+Wind 是专业的金融数据终端，提供机构级数据质量：
 
 ```bash
-pip install akshare
+# 需要购买 Wind 订阅并安装终端
+pip install WindPy
 ```
 
-然后通过Python脚本提供数据接口。
+详见 `server/wind_api/README.md`（已保留供参考）
+
+#### 2. 使用 Tushare（推荐付费方案）
+
+Tushare 提供高质量的金融数据接口：
+
+```python
+# 需要先注册获取 token: https://tushare.pro/
+import tushare as ts
+ts.set_token('your_token_here')
+pro = ts.pro_api()
+```
+
+#### 3. 继续使用 AKShare
+
+无需任何配置，开箱即用：
+
+```bash
+npm run setup:akshare
+npm run server
+```
 
 ## 注意事项
 
-1. 免费API可能存在访问频率限制
-2. 部分数据源可能需要代理访问
-3. 建议在生产环境使用付费的专业数据接口
-4. 导出图片功能在某些浏览器可能需要用户授权
+1. **AKShare 数据源**：
+   - 数据来自公开API（东方财富、新浪财经等）
+   - 实时数据可能有1-5分钟延迟
+   - 免费使用，无访问频率限制
+   - 适合个人项目和学习使用
+
+2. **网络要求**：
+   - 需要能访问国内金融数据网站
+   - 某些网络环境可能需要配置代理
+
+3. **Python 环境**：
+   - 需要 Python 3.7 或更高版本
+   - macOS 用户可能需要降级 urllib3：`pip3 install 'urllib3<2.0'`
+   - 建议使用虚拟环境管理依赖
+
+4. **浏览器兼容性**：
+   - 推荐使用 Chrome、Firefox、Edge 等现代浏览器
+   - 导出图片功能在某些浏览器可能需要用户授权
+
+5. **故障排除**：
+   - 遇到问题请查看 [故障排除指南](TROUBLESHOOTING.md)
+   - 常见问题都有详细的解决方案
 
 ## 开发计划
 
-- [ ] 添加更多数据源支持
-- [ ] 实现数据缓存机制
-- [ ] 添加图表可视化
+- [x] 使用 AKShare 作为免费数据源
+- [x] 支持股债利差分析
+- [x] 完整的板块数据展示
+- [ ] 添加数据缓存机制
+- [ ] 添加更多技术指标
 - [ ] 支持自定义板块分类
 - [ ] 添加数据对比功能
 - [ ] 移动端适配优化
+- [ ] 支持多数据源切换
 
 ## License
 
