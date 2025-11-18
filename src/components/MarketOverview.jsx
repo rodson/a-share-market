@@ -11,8 +11,10 @@ const MarketOverview = ({ data }) => {
   };
 
   const formatPercent = (value) => {
-    if (value === 0) return '0.00%';
-    return value > 0 ? `${value.toFixed(2)}%` : `${value.toFixed(2)}%`;
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    if (!num || num === 0) return '0.00%';
+    const sign = num > 0 ? '+' : '';
+    return `${sign}${num.toFixed(2)}%`;
   };
 
   return (

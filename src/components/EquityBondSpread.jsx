@@ -18,6 +18,22 @@ const EquityBondSpread = ({ data }) => {
 
   return (
     <Box sx={{ bgcolor: '#5a5a5a', mb: 0 }}>
+      {/* 标题 */}
+      <Box sx={{ 
+        bgcolor: '#6a6a6a', 
+        p: 2, 
+        textAlign: 'center',
+        borderBottom: '2px solid #4a4a4a'
+      }}>
+        <Typography sx={{ 
+          fontSize: '28px', 
+          fontWeight: 'bold', 
+          color: '#fff'
+        }}>
+          A股整体（万得全A指数）
+        </Typography>
+      </Box>
+      
       {/* 顶部指标区域 */}
       <Box sx={{ 
         display: 'grid',
@@ -113,6 +129,41 @@ const EquityBondSpread = ({ data }) => {
               </Typography>
             </Grid>
           </Grid>
+        </Box>
+      </Box>
+
+      {/* 十年国债利率 */}
+      <Box sx={{ 
+        bgcolor: '#a8c9e8',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 0,
+        borderBottom: '2px solid #4a4a4a'
+      }}>
+        <Box sx={{ bgcolor: '#8eb3d4', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
+          <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+            十年国债
+          </Typography>
+        </Box>
+        <Box sx={{ bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
+          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            利率
+          </Typography>
+        </Box>
+        <Box sx={{ bgcolor: '#8eb3d4', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
+          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            {metrics.bond10Y}%
+          </Typography>
+        </Box>
+        <Box sx={{ bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center' }}>
+          <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+            利率分位
+          </Typography>
+        </Box>
+        <Box sx={{ gridColumn: 'span 4', bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center', borderTop: '1px solid #6a93b8' }}>
+          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            {metrics.bond10YPercentile}%
+          </Typography>
         </Box>
       </Box>
 

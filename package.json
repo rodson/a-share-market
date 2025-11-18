@@ -9,9 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "setup:akshare": "pip3 install -r requirements.txt",
-    "test:akshare": "python3 server/akshare_api/test_akshare.py",
-    "diagnose": "python3 server/akshare_api/diagnose.py"
+    "server:real": "USE_REAL_DATA=true node server/index.js",
+    "start": "node server/index.js & vite",
+    "start:real": "USE_REAL_DATA=true node server/index.js & vite"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -22,6 +22,7 @@
     "axios": "^1.6.2",
     "cors": "^2.8.5",
     "dayjs": "^1.11.10",
+    "dotenv": "^17.2.3",
     "express": "^4.18.2",
     "html2canvas": "^1.4.1",
     "node-cache": "^5.1.2",
