@@ -4,12 +4,16 @@
 获取股债利差数据
 使用AKShare获取历史股债利差数据及估值分位
 
+数据源说明:
+- 指数: 沪深300指数（sh000300）
+- PE数据: 中证指数官网 - 沪深300市盈率1（静态PE）
+- PB数据: 理杏仁 - 沪深300市净率
+
 计算方法说明:
-1. PE计算: 不剔除负值，保留所有PE数据（包括负PE）
-   - 负PE表示企业亏损，会导致负的盈利收益率
-   - 这样可以更真实地反映市场整体估值状况
+1. PE计算: 使用静态PE（市盈率1）
+   - 基于最近一期财报的每股收益计算
    
-2. PB计算: 使用总股本加权
+2. PB计算: 使用市值加权的市净率
    - 反映了不同市值公司对整体估值的贡献
    
 3. 盈利收益率法:
@@ -59,21 +63,36 @@ def get_equity_bond_spread(target_date):
         end_date = target_date
         
         # 获取沪深300指数历史数据（作为市场代表）
-        # AKShare使用沪深300作为全市场代表指数
         index_df = ak.stock_zh_index_daily(symbol="sh000300")
         index_df['date'] = pd.to_datetime(index_df['date'])
         
         # 筛选日期范围
         index_df = index_df[(index_df['date'] >= start_date) & (index_df['date'] <= end_date)]
         
-        # 获取市场估值数据 - 使用指数估值接口
+        # 获取市场估值数据 - 使用沪深300的PE和PB数据
         try:
-            # 获取沪深300的PE和PB数据
-            valuation_df = ak.index_value_hist_funddb(symbol="沪深300")
-            valuation_df['日期'] = pd.to_datetime(valuation_df['日期'])
-            valuation_df = valuation_df[(valuation_df['日期'] >= start_date) & (valuation_df['日期'] <= end_date)]
-        except:
+            # 获取沪深300的PE数据（来自中证指数官网）
+            pe_df = ak.stock_zh_index_value_csindex(symbol="000300")
+            pe_df['日期'] = pd.to_datetime(pe_df['日期'])
+            pe_df = pe_df[(pe_df['日期'] >= start_date) & (pe_df['日期'] <= end_date)]
+            # 使用市盈率1（静态PE）
+            pe_df = pe_df[['日期', '市盈率1']].rename(columns={'市盈率1': 'PE'})
+            
+            # 获取沪深300的PB数据（来自理杏仁）
+            pb_df = ak.stock_index_pb_lg()
+            pb_df['日期'] = pd.to_datetime(pb_df['日期'])
+            pb_df = pb_df[(pb_df['日期'] >= start_date) & (pb_df['日期'] <= end_date)]
+            # 使用市净率（加权平均）
+            pb_df = pb_df[['日期', '市净率']].rename(columns={'市净率': 'PB'})
+            
+            # 合并PE和PB数据
+            valuation_df = pd.merge(pe_df, pb_df, on='日期', how='outer')
+            valuation_df = valuation_df.sort_values('日期')
+            # 填充缺失值
+            valuation_df = valuation_df.fillna(method='ffill').fillna(method='bfill')
+        except Exception as e:
             # 如果获取失败，使用默认估值
+            print(f"Warning: 获取估值数据失败，使用默认值: {e}", file=sys.stderr)
             valuation_df = pd.DataFrame({
                 '日期': index_df['date'],
                 'PE': [15.0] * len(index_df),

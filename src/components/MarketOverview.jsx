@@ -29,7 +29,7 @@ const MarketOverview = ({ data }) => {
         mb: 1
       }}>
         <Typography sx={{ fontSize: '13px', color: '#fff', fontWeight: 500 }}>
-          AB股涨跌（万得A股）
+          AB股涨跌（沪深300）
         </Typography>
         <Typography sx={{ fontSize: '13px', color: '#fff', fontWeight: 500 }}>
           涨跌幅

@@ -30,7 +30,7 @@ const EquityBondSpread = ({ data }) => {
           fontWeight: 'bold', 
           color: '#fff'
         }}>
-          A股整体（万得全A指数）
+          A股整体（沪深300指数）
         </Typography>
       </Box>
       
@@ -209,7 +209,7 @@ const EquityBondSpread = ({ data }) => {
               tick={{ fill: '#fff', fontSize: 11 }}
               domain={[0, 8000]}
               label={{ 
-                value: '万得全A (点)', 
+                value: '沪深300 (点)', 
                 angle: 90, 
                 position: 'insideRight', 
                 fill: '#fff',
@@ -231,7 +231,7 @@ const EquityBondSpread = ({ data }) => {
               }}
               formatter={(value, name) => {
                 if (name === '股债利差') return [value.toFixed(2) + '%', name];
-                if (name === '万得全A') return [value.toFixed(0) + '点', name];
+                if (name === '沪深300') return [value.toFixed(0) + '点', name];
                 return [value, name];
               }}
             />
