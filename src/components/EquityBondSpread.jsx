@@ -21,7 +21,7 @@ const EquityBondSpread = ({ data }) => {
       {/* 标题 */}
       <Box sx={{ 
         bgcolor: '#6a6a6a', 
-        p: 2, 
+        p: 1, 
         textAlign: 'center',
         borderBottom: '2px solid #4a4a4a'
       }}>
@@ -30,7 +30,7 @@ const EquityBondSpread = ({ data }) => {
           fontWeight: 'bold', 
           color: '#fff'
         }}>
-          A股整体（沪深300指数）
+          A股整体（万得全A指数）
         </Typography>
       </Box>
       
@@ -42,44 +42,47 @@ const EquityBondSpread = ({ data }) => {
         borderBottom: '2px solid #4a4a4a'
       }}>
         {/* 左侧：股债利差估值分位 */}
-        <Box sx={{ bgcolor: '#d4b896', p: 2, borderRight: '1px solid #4a4a4a' }}>
-          <Typography sx={{ 
-            fontSize: '20px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            textAlign: 'center',
-            mb: 1
-          }}>
-            股债利差估值分位
-          </Typography>
-          <Typography sx={{ 
-            fontSize: '32px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            textAlign: 'center'
-          }}>
-            {metrics.spreadPercentile}%
-          </Typography>
+        <Box sx={{ bgcolor: '#fff', height: '100%' }}>
+          <Box sx={{ bgcolor: '#ffeda0', p: 1, borderBottom: '1px solid #ccc' }}>
+            <Typography sx={{ 
+              fontSize: '20px', 
+              fontWeight: 'normal', 
+              color: '#000',
+              textAlign: 'center'
+            }}>
+              股债利差估值分位
+            </Typography>
+          </Box>
+          <Box sx={{ bgcolor: '#ffeda0', p: 1, borderBottom: '1px solid #ccc' }}>
+            <Typography sx={{ 
+              fontSize: '28px', 
+              fontWeight: 'normal', 
+              color: '#000',
+              textAlign: 'center'
+            }}>
+              {metrics.spreadPercentile}%
+            </Typography>
+          </Box>
           
           {/* PB和PE指标 */}
-          <Grid container spacing={0} sx={{ mt: 2 }}>
-            <Grid item xs={3} sx={{ bgcolor: '#c9a876', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+          <Grid container spacing={0} sx={{ height: '40px' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ffeda0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 PB
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#d4b896', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ffeda0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 {metrics.pb}
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#c9a876', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ffeda0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 PB分位
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#d4b896', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ffeda0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 {metrics.pbPercentile}%
               </Typography>
             </Grid>
@@ -87,44 +90,47 @@ const EquityBondSpread = ({ data }) => {
         </Box>
 
         {/* 右侧：股债利差 */}
-        <Box sx={{ bgcolor: '#f4c4c4', p: 2 }}>
-          <Typography sx={{ 
-            fontSize: '20px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            textAlign: 'center',
-            mb: 1
-          }}>
-            股债利差
-          </Typography>
-          <Typography sx={{ 
-            fontSize: '32px', 
-            fontWeight: 'bold', 
-            color: '#333',
-            textAlign: 'center'
-          }}>
-            {metrics.spread}%
-          </Typography>
+        <Box sx={{ bgcolor: '#fff', height: '100%' }}>
+          <Box sx={{ bgcolor: '#ffeda0', p: 1, borderBottom: '1px solid #ccc', borderLeft: '1px solid #999' }}>
+             <Typography sx={{ 
+              fontSize: '20px', 
+              fontWeight: 'normal', 
+              color: '#000',
+              textAlign: 'center'
+            }}>
+              股债利差
+            </Typography>
+          </Box>
+          <Box sx={{ bgcolor: '#ffeda0', p: 1, borderBottom: '1px solid #ccc', borderLeft: '1px solid #999' }}>
+            <Typography sx={{ 
+              fontSize: '28px', 
+              fontWeight: 'normal', 
+              color: '#000',
+              textAlign: 'center'
+            }}>
+              {metrics.spread}%
+            </Typography>
+          </Box>
           
           {/* PE指标 */}
-          <Grid container spacing={0} sx={{ mt: 2 }}>
-            <Grid item xs={3} sx={{ bgcolor: '#e9b4b4', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+          <Grid container spacing={0} sx={{ height: '40px' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ff9999', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc', borderLeft: '1px solid #999' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 PE
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#f4c4c4', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ff9999', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 {metrics.pe}
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#e9b4b4', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ff9999', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 PE分位
               </Typography>
             </Grid>
-            <Grid item xs={3} sx={{ bgcolor: '#f4c4c4', p: 1, textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+            <Grid item xs={3} sx={{ bgcolor: '#ff9999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Typography sx={{ fontSize: '18px', color: '#000' }}>
                 {metrics.pePercentile}%
               </Typography>
             </Grid>
@@ -132,89 +138,41 @@ const EquityBondSpread = ({ data }) => {
         </Box>
       </Box>
 
-      {/* 十年国债利率 */}
-      <Box sx={{ 
-        bgcolor: '#a8c9e8',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 0,
-        borderBottom: '2px solid #4a4a4a'
-      }}>
-        <Box sx={{ bgcolor: '#8eb3d4', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
-          <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
-            十年国债
-          </Typography>
-        </Box>
-        <Box sx={{ bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
-          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
-            利率
-          </Typography>
-        </Box>
-        <Box sx={{ bgcolor: '#8eb3d4', p: 1.5, textAlign: 'center', borderRight: '1px solid #6a93b8' }}>
-          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
-            {metrics.bond10Y}%
-          </Typography>
-        </Box>
-        <Box sx={{ bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center' }}>
-          <Typography sx={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
-            利率分位
-          </Typography>
-        </Box>
-        <Box sx={{ gridColumn: 'span 4', bgcolor: '#a8c9e8', p: 1.5, textAlign: 'center', borderTop: '1px solid #6a93b8' }}>
-          <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
-            {metrics.bond10YPercentile}%
-          </Typography>
-        </Box>
-      </Box>
-
       {/* 图表区域 */}
-      <Box sx={{ bgcolor: '#6a6a6a', p: 2 }}>
+      <Box sx={{ bgcolor: '#6a6a6a', pt: 1, pb: 0, pl: 1, pr: 1 }}>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+            margin={{ top: 20, right: 10, left: 10, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#888" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#888" vertical={false} />
             <XAxis 
               dataKey="displayYear" 
               stroke="#fff"
-              tick={{ fill: '#fff', fontSize: 11 }}
-              interval="preserveStartEnd"
+              tick={{ fill: '#fff', fontSize: 12 }}
+              interval={0}
               tickFormatter={(value) => value || ''}
-              label={{ 
-                value: '年份 (2005年1月1日 - 2025年10月)', 
-                position: 'insideBottom', 
-                offset: -10,
-                fill: '#ccc',
-                fontSize: 11
-              }}
+              axisLine={false}
+              tickLine={false}
             />
             <YAxis 
               yAxisId="left"
               stroke="#fff"
-              tick={{ fill: '#fff', fontSize: 11 }}
-              domain={[-2, 8]}
-              label={{ 
-                value: '股债利差 (%)', 
-                angle: -90, 
-                position: 'insideLeft', 
-                fill: '#fff',
-                style: { textAnchor: 'middle' }
-              }}
+              tick={{ fill: '#fff', fontSize: 12 }}
+              domain={[-2.0, 8.0]}
+              tickCount={6}
+              axisLine={false}
+              tickLine={false}
             />
             <YAxis 
               yAxisId="right"
               orientation="right"
               stroke="#fff"
-              tick={{ fill: '#fff', fontSize: 11 }}
+              tick={{ fill: '#fff', fontSize: 12 }}
               domain={[0, 8000]}
-              label={{ 
-                value: '沪深300 (点)', 
-                angle: 90, 
-                position: 'insideRight', 
-                fill: '#fff',
-                style: { textAnchor: 'middle' }
-              }}
+              tickCount={5}
+              axisLine={false}
+              tickLine={false}
             />
             <Tooltip 
               contentStyle={{ 
@@ -231,13 +189,15 @@ const EquityBondSpread = ({ data }) => {
               }}
               formatter={(value, name) => {
                 if (name === '股债利差') return [value.toFixed(2) + '%', name];
-                if (name === '沪深300') return [value.toFixed(0) + '点', name];
+                if (name === '万得全A') return [value.toFixed(0) + '点', name];
                 return [value, name];
               }}
             />
             <Legend 
-              wrapperStyle={{ color: '#fff', paddingTop: '10px' }}
-              iconType="line"
+              verticalAlign="top" 
+              height={36}
+              iconType="plainline"
+              wrapperStyle={{ top: -5 }}
             />
             <Line 
               yAxisId="left"
@@ -261,6 +221,39 @@ const EquityBondSpread = ({ data }) => {
             />
           </LineChart>
         </ResponsiveContainer>
+      </Box>
+
+      {/* 底部：十年国债 */}
+      <Box sx={{ 
+        bgcolor: '#e6f3ff',
+        display: 'flex',
+        borderTop: '1px solid #4a4a4a'
+      }}>
+        <Box sx={{ flex: 1, bgcolor: '#e6f3ff', p: 1, textAlign: 'center', borderRight: '1px solid #999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography sx={{ fontSize: '20px', color: '#000' }}>
+            十年国债
+          </Typography>
+        </Box>
+        <Box sx={{ flex: 1, bgcolor: '#e6f3ff', p: 1, textAlign: 'center', borderRight: '1px solid #999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography sx={{ fontSize: '20px', color: '#000' }}>
+            利率
+          </Typography>
+        </Box>
+        <Box sx={{ flex: 2, bgcolor: '#e6f3ff', p: 1, textAlign: 'center', borderRight: '1px solid #999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography sx={{ fontSize: '24px', color: '#000' }}>
+            {metrics.bond10Y}%
+          </Typography>
+        </Box>
+        <Box sx={{ flex: 1, bgcolor: '#e6f3ff', p: 1, textAlign: 'center', borderRight: '1px solid #999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography sx={{ fontSize: '20px', color: '#000' }}>
+            利率分位
+          </Typography>
+        </Box>
+        <Box sx={{ flex: 2, bgcolor: '#e6f3ff', p: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography sx={{ fontSize: '24px', color: '#000' }}>
+            {metrics.bond10YPercentile}%
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

@@ -11,7 +11,7 @@
     "server": "node server/index.js",
     "server:real": "USE_REAL_DATA=true node server/index.js",
     "start": "node server/index.js & vite",
-    "start:real": "USE_REAL_DATA=true node server/index.js & vite"
+    "start:wind": "python3 server/wind_api/wind_server.py & USE_WIND_API=true node server/index.js & vite"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
